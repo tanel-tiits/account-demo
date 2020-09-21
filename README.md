@@ -47,7 +47,7 @@ When application is running various requests can be sent to application with cmd
   * misc/requests/invalid
 
 
-### Requests ### 
+### URLs and requests ### 
 
 * Get list of all accounts's data
 
@@ -69,18 +69,28 @@ When application is running various requests can be sent to application with cmd
   http://localhost:8080/api/v1/transaction/19e7c65a-2d84-4e6b-a75d-2c33abf2daee
 
 
-* Storing a new transaction is done with PUT request to:
+* Store a new transaction with PUT request
 
   http://localhost:8080/api/v1/transaction/some-external-uuid
 
-  with request body containing the transaction's details:
+  request body contains the transaction's data:
 
   ~~~
   {"id":"some-external-uuid","cashAmount":500.0,
    "sourceAccount":"NO0312340000001",
    "destinationAccount":"NO7312340000002"}
   ~~~
-  action is idempotent
+  this action is idempotent
+
+
+* Swagger UI
+
+  http://localhost:8080/swagger-ui.html
+
+
+* OpenAPI documentation
+
+  http://localhost:8080/api-docs
 
 
 * Get runtime application info from Actuator

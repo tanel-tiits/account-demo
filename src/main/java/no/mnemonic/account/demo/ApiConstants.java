@@ -11,4 +11,9 @@ public final class ApiConstants {
     public static final String ACCOUNT_CONTROLLER_ENDPOINT = API_BASE_URL + "/account";
 
     public static final String TRANSACTION_CONTROLLER_ENDPOINT = API_BASE_URL + "/transaction";
+
+    public static final String HTTP_RESPONSE_CODE_OK = "200";
+    public static final String HTTP_RESPONSE_CODE_BAD_REQUEST = "400";
+    public static final String HTTP_RESPONSE_CODE_NOT_FOUND = "404";
+    public static final String HTTP_RESPONSE_CODE_INT_SRV_ERROR = "500";
 }
