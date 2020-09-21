@@ -69,7 +69,7 @@ When application is running various requests can be sent to application with cmd
   http://localhost:8080/transaction/19e7c65a-2d84-4e6b-a75d-2c33abf2daee
 
 
-* Storing a new transaction is done with PUT request to URL (action is idempotent):
+* Storing a new transaction is done with PUT request to:
 
   http://localhost:8080/transaction/some-external-uuid
 
@@ -80,3 +80,9 @@ When application is running various requests can be sent to application with cmd
    "sourceAccount":"NO0312340000001",
    "destinationAccount":"NO7312340000002"}
   ~~~
+  action is idempotent
+
+
+* Actuator - runtime application info
+
+  http://localhost:8080/actuator
