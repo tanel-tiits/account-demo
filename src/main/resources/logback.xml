@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration>
+<configuration>
+
+  <property resource="application.properties" />
+  <property resource="version.properties" />
+
+  <statusListener class="ch.qos.logback.core.status.NopStatusListener" />
+
+  <include resource="org/springframework/boot/logging/logback/base.xml" />
+
+  <root level="${logging.level.root}">
+    <appender-ref ref="CONSOLE" />
+    <appender-ref ref="FILE" />
+  </root>
+
+</configuration>

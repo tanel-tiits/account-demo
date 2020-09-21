@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+  <property name="now" value="CURRENT_TIMESTAMP()" dbms="h2" />
+
+  <changeSet id="101-00-initial-data" author="tanel.tiits" dbms="h2">
+
+    <insert tableName="ACCOUNT">
+      <column name="ID" valueNumeric="1" />
+      <column name="EXTERNAL_ID" value="NO0312340000001" />
+      <column name="NAME" value="Account One" />
+      <column name="AVAILABLE_CASH" value="1000.0" />
+      <column name="CREATED_DTIME" valueDate="${now}" />
+      <column name="UPDATED_DTIME" valueDate="${now}" />
+    </insert>
+
+    <insert tableName="ACCOUNT">
+      <column name="ID" valueNumeric="2" />
+      <column name="EXTERNAL_ID" value="NO7312340000002" />
+      <column name="NAME" value="Account Two" />
+      <column name="AVAILABLE_CASH" value="2000.0" />
+      <column name="CREATED_DTIME" valueDate="${now}" />
+      <column name="UPDATED_DTIME" valueDate="${now}" />
+    </insert>
+
+    <insert tableName="ACCOUNT">
+      <column name="ID" valueNumeric="3" />
+      <column name="EXTERNAL_ID" value="NO4612340000003" />
+      <column name="NAME" value="Account Three" />
+      <column name="AVAILABLE_CASH" value="3000.0" />
+      <column name="CREATED_DTIME" valueDate="${now}" />
+      <column name="UPDATED_DTIME" valueDate="${now}" />
+    </insert>
+
+    <insert tableName="TRANSACTION">
+      <column name="ID" valueNumeric="10001" />
+      <column name="EXTERNAL_ID" value="19e7c65a-2d84-4e6b-a75d-2c33abf2daee" />
+      <column name="REGISTERED_TIME" valueDate="${now}" />
+      <column name="EXECUTED_TIME" valueDate="${now}" />
+      <column name="SUCCESS" valueBoolean="true" />
+      <column name="CASH_AMOUNT" value="1000.0" />
+      <column name="SOURCE_ACCOUNT_ID" valueNumeric="2" />
+      <column name="DESTINATION_ACCOUNT_ID" value="3" />
+      <column name="CREATED_DTIME" valueDate="${now}" />
+      <column name="UPDATED_DTIME" valueDate="${now}" />
+    </insert>
+
+    <insert tableName="TRANSACTION">
+      <column name="ID" valueNumeric="10002" />
+      <column name="EXTERNAL_ID" value="a8a75c55-be7d-4502-8068-c59482964bee" />
+      <column name="REGISTERED_TIME" valueDate="${now}" />
+      <column name="EXECUTED_TIME" valueDate="${now}" />
+      <column name="SUCCESS" valueBoolean="false" />
+      <column name="CASH_AMOUNT" value="5000.0" />
+      <column name="SOURCE_ACCOUNT_ID" valueNumeric="2" />
+      <column name="DESTINATION_ACCOUNT_ID" value="3" />
+      <column name="CREATED_DTIME" valueDate="${now}" />
+      <column name="UPDATED_DTIME" valueDate="${now}" />
+    </insert>
+
+  </changeSet>
+
+</databaseChangeLog>

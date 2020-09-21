@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+  <property name="now" value="CURRENT_TIMESTAMP()" dbms="h2" />
+
+  <changeSet id="001-00-initial-structures" author="tanel.tiits" dbms="h2">
+
+    <createTable tableName="ACCOUNT">
+      <column name="ID" type="BIGINT" autoIncrement="true" startWith="1" incrementBy="1">
+        <constraints nullable="false" primaryKey="true" />
+      </column>
+      <column name="EXTERNAL_ID" type="VARCHAR(34)">
+        <constraints nullable="false" unique="true" />
+      </column>
+      <column name="NAME" type="VARCHAR(100)">
+        <constraints nullable="false" unique="true" />
+      </column>
+      <column name="AVAILABLE_CASH" type="DECIMAL">
+        <constraints nullable="false" />
+      </column>
+    </createTable>
+
+    <createTable tableName="TRANSACTION">
+      <column name="ID" type="BIGINT" autoIncrement="true" startWith="10000" incrementBy="1">
+        <constraints nullable="false" primaryKey="true" />
+      </column>
+      <column name="EXTERNAL_ID" type="VARCHAR(36)">
+        <constraints nullable="false" unique="true" />
+      </column>
+      <column name="REGISTERED_TIME" type="TIMESTAMP" defaultValue="${now}">
+        <constraints nullable="false" />
+      </column>
+      <column name="EXECUTED_TIME" type="TIMESTAMP">
+        <constraints nullable="true" />
+      </column>
+      <column name="SUCCESS" type="BOOLEAN">
+        <constraints nullable="true" />
+      </column>
+      <column name="CASH_AMOUNT" type="DECIMAL">
+        <constraints nullable="false" />
+      </column>
+      <column name="SOURCE_ACCOUNT_ID" type="BIGINT">
+        <constraints nullable="false" foreignKeyName="FK_TX_SRC_ACC_ID" references="ACCOUNT(ID)" />
+      </column>
+      <column name="DESTINATION_ACCOUNT_ID" type="BIGINT">
+        <constraints nullable="false" foreignKeyName="FK_TX_DST_ACC_ID" references="ACCOUNT(ID)" />
+      </column>
+    </createTable>
+
+  </changeSet>
+
+</databaseChangeLog>
