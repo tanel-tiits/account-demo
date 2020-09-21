@@ -20,7 +20,7 @@ import no.mnemonic.account.demo.model.Transaction;
 import no.mnemonic.account.demo.service.TransactionService;
 
 @RestController
-@RequestMapping(path = ApiConstants.API_BASE_URL + "/transaction")
+@RequestMapping(path = ApiConstants.TRANSACTION_CONTROLLER_ENDPOINT)
 public class TransactionController {
 
     @Autowired

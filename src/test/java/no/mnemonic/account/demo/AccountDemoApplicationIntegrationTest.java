@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -18,6 +20,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import no.mnemonic.account.demo.config.ApplicationTestConfig;
 import no.mnemonic.account.demo.model.Account;
 import no.mnemonic.account.demo.model.ErrorData;
 import no.mnemonic.account.demo.model.Transaction;
@@ -25,10 +28,9 @@ import no.mnemonic.account.demo.service.TransactionService;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@ContextConfiguration(classes = {ApplicationTestConfig.class})
+@TestPropertySource(locations = {"classpath:application-test.properties"})
 class AccountDemoApplicationIntegrationTest {
-
-    static final String ACCOUNT_API_BASE_URL = ApiConstants.API_BASE_URL + "/account";
-    static final String TRANSACTION_API_BASE_URL = ApiConstants.API_BASE_URL + "/transaction";
 
     static final String ACCOUNT_EXT_ID_1 = "NO0312340000001"; // account has 1000.0 initially
     static final String ACCOUNT_EXT_ID_2 = "NO7312340000002"; // account has 2000.0 initially
@@ -50,7 +52,7 @@ class AccountDemoApplicationIntegrationTest {
 
         MvcResult result = mockMvc
             .perform(MockMvcRequestBuilders
-                    .get(ACCOUNT_API_BASE_URL)
+                    .get(ApiConstants.ACCOUNT_CONTROLLER_ENDPOINT)
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
@@ -66,7 +68,7 @@ class AccountDemoApplicationIntegrationTest {
     void testAccountNotFound() throws Exception {
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders
-                .get(ACCOUNT_API_BASE_URL + "/{extId}", "XYZ")
+                .get(ApiConstants.ACCOUNT_CONTROLLER_ENDPOINT + "/{extId}", "XYZ")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
@@ -81,7 +83,7 @@ class AccountDemoApplicationIntegrationTest {
 
         MvcResult result = mockMvc
             .perform(MockMvcRequestBuilders
-                    .get(TRANSACTION_API_BASE_URL)
+                    .get(ApiConstants.TRANSACTION_CONTROLLER_ENDPOINT)
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
@@ -97,7 +99,7 @@ class AccountDemoApplicationIntegrationTest {
     void testTransactionNotFound() throws Exception {
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders
-                .get(TRANSACTION_API_BASE_URL + "/{extId}", "XYZ")
+                .get(ApiConstants.TRANSACTION_CONTROLLER_ENDPOINT + "/{extId}", "XYZ")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
@@ -128,27 +130,40 @@ class AccountDemoApplicationIntegrationTest {
                 .withSourceAccountExtId(ACCOUNT_EXT_ID_1)
                 .withDestinationAccountExtId(ACCOUNT_EXT_ID_2)
                 .build();
-        mockMvc.perform(MockMvcRequestBuilders
-                .put(TRANSACTION_API_BASE_URL + "/{extId}", TRANSACTION_EXT_ID_1)
+        MvcResult resultBeforeProcessing = mockMvc.perform(MockMvcRequestBuilders
+                .put(ApiConstants.TRANSACTION_CONTROLLER_ENDPOINT + "/{extId}", TRANSACTION_EXT_ID_1)
                 .content(objectMapper.writeValueAsString(tx))
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk());
-
-        txService.processUnexecutedTransactions();
-
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders
-                .get(TRANSACTION_API_BASE_URL + "/{extId}", TRANSACTION_EXT_ID_1)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andReturn();
 
-        Transaction txFromResult = objectMapper.readValue(result.getResponse().getContentAsString(), Transaction.class);
+        Transaction txBeforeProcessing = objectMapper.readValue(resultBeforeProcessing.getResponse().getContentAsString(),
+                Transaction.class);
 
-        assertNotNull(txFromResult);
-        assertEquals(TRANSACTION_EXT_ID_1, txFromResult.getExternalId());
-        assertEquals(Boolean.TRUE, txFromResult.isSuccess());
+        assertNotNull(txBeforeProcessing);
+        assertEquals(TRANSACTION_EXT_ID_1, txBeforeProcessing.getExternalId());
+        assertNotNull(txBeforeProcessing.getRegisteredTime());
+        assertNull(txBeforeProcessing.getExecutedTime());
+        assertNull(txBeforeProcessing.isSuccess());
+
+        txService.processUnexecutedTransactions();
+
+        MvcResult resultAfterProcessing = mockMvc.perform(MockMvcRequestBuilders
+                .get(ApiConstants.TRANSACTION_CONTROLLER_ENDPOINT + "/{extId}", TRANSACTION_EXT_ID_1)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andReturn();
+
+        Transaction txAfterProcessing = objectMapper.readValue(resultAfterProcessing.getResponse().getContentAsString(),
+                Transaction.class);
+
+        assertNotNull(txAfterProcessing);
+        assertEquals(TRANSACTION_EXT_ID_1, txAfterProcessing.getExternalId());
+        assertNotNull(txAfterProcessing.getRegisteredTime());
+        assertNotNull(txAfterProcessing.getExecutedTime());
+        assertEquals(Boolean.TRUE, txAfterProcessing.isSuccess());
 
         Account srcAccountAfter = getAccountByExternalId(ACCOUNT_EXT_ID_1);
         Account dstAccountAfter = getAccountByExternalId(ACCOUNT_EXT_ID_2);
@@ -181,7 +196,7 @@ class AccountDemoApplicationIntegrationTest {
                 .withDestinationAccountExtId(ACCOUNT_EXT_ID_2)
                 .build();
         mockMvc.perform(MockMvcRequestBuilders
-                .put(TRANSACTION_API_BASE_URL + "/{extId}", TRANSACTION_EXT_ID_2)
+                .put(ApiConstants.TRANSACTION_CONTROLLER_ENDPOINT + "/{extId}", TRANSACTION_EXT_ID_2)
                 .content(objectMapper.writeValueAsString(tx))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
@@ -190,7 +205,7 @@ class AccountDemoApplicationIntegrationTest {
         txService.processUnexecutedTransactions();
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders
-                .get(TRANSACTION_API_BASE_URL + "/{extId}", TRANSACTION_EXT_ID_2)
+                .get(ApiConstants.TRANSACTION_CONTROLLER_ENDPOINT + "/{extId}", TRANSACTION_EXT_ID_2)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
@@ -212,7 +227,7 @@ class AccountDemoApplicationIntegrationTest {
     protected Account getAccountByExternalId(String accExtId) throws Exception {
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders
-                .get(ACCOUNT_API_BASE_URL + "/{extId}", accExtId)
+                .get(ApiConstants.ACCOUNT_CONTROLLER_ENDPOINT + "/{extId}", accExtId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())

@@ -18,7 +18,7 @@ import no.mnemonic.account.demo.model.Account;
 import no.mnemonic.account.demo.service.AccountService;
 
 @RestController
-@RequestMapping(path = ApiConstants.API_BASE_URL + "/account")
+@RequestMapping(path = ApiConstants.ACCOUNT_CONTROLLER_ENDPOINT)
 public class AccountController {
 
     @Autowired
