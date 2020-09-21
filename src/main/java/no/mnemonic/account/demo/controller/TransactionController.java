@@ -42,10 +42,10 @@ public class TransactionController {
     }
 
     @PutMapping(path = "/{extId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<String> save(@PathVariable(name = "extId", required = true) String extId,
+    public ResponseEntity<Transaction> save(@PathVariable(name = "extId", required = true) String extId,
             @RequestBody(required = true) Transaction transaction) {
 
-        transactionService.saveTransaction(extId, transaction);
-        return new ResponseEntity<>(HttpStatus.OK);
+        Transaction savedTx = transactionService.saveTransaction(extId, transaction);
+        return new ResponseEntity<>(savedTx, HttpStatus.OK);
     }
 }
