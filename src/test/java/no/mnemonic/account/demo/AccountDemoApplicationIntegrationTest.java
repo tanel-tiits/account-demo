@@ -27,6 +27,9 @@ import no.mnemonic.account.demo.service.TransactionService;
 @AutoConfigureMockMvc
 class AccountDemoApplicationIntegrationTest {
 
+    static final String ACCOUNT_API_BASE_URL = ApiConstants.API_BASE_URL + "/account";
+    static final String TRANSACTION_API_BASE_URL = ApiConstants.API_BASE_URL + "/transaction";
+
     static final String ACCOUNT_EXT_ID_1 = "NO0312340000001"; // account has 1000.0 initially
     static final String ACCOUNT_EXT_ID_2 = "NO7312340000002"; // account has 2000.0 initially
 
@@ -47,7 +50,7 @@ class AccountDemoApplicationIntegrationTest {
 
         MvcResult result = mockMvc
             .perform(MockMvcRequestBuilders
-                    .get("/account")
+                    .get(ACCOUNT_API_BASE_URL)
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
@@ -63,7 +66,7 @@ class AccountDemoApplicationIntegrationTest {
     void testAccountNotFound() throws Exception {
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders
-                .get("/account/{extId}", "XYZ")
+                .get(ACCOUNT_API_BASE_URL + "/{extId}", "XYZ")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
@@ -78,7 +81,7 @@ class AccountDemoApplicationIntegrationTest {
 
         MvcResult result = mockMvc
             .perform(MockMvcRequestBuilders
-                    .get("/transaction")
+                    .get(TRANSACTION_API_BASE_URL)
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
@@ -94,7 +97,7 @@ class AccountDemoApplicationIntegrationTest {
     void testTransactionNotFound() throws Exception {
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders
-                .get("/transaction/{extId}", "XYZ")
+                .get(TRANSACTION_API_BASE_URL + "/{extId}", "XYZ")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
@@ -126,7 +129,7 @@ class AccountDemoApplicationIntegrationTest {
                 .withDestinationAccountExtId(ACCOUNT_EXT_ID_2)
                 .build();
         mockMvc.perform(MockMvcRequestBuilders
-                .put("/transaction/{extId}", TRANSACTION_EXT_ID_1)
+                .put(TRANSACTION_API_BASE_URL + "/{extId}", TRANSACTION_EXT_ID_1)
                 .content(objectMapper.writeValueAsString(tx))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
@@ -135,7 +138,7 @@ class AccountDemoApplicationIntegrationTest {
         txService.processUnexecutedTransactions();
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders
-                .get("/transaction/{extId}", TRANSACTION_EXT_ID_1)
+                .get(TRANSACTION_API_BASE_URL + "/{extId}", TRANSACTION_EXT_ID_1)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
@@ -178,7 +181,7 @@ class AccountDemoApplicationIntegrationTest {
                 .withDestinationAccountExtId(ACCOUNT_EXT_ID_2)
                 .build();
         mockMvc.perform(MockMvcRequestBuilders
-                .put("/transaction/{extId}", TRANSACTION_EXT_ID_2)
+                .put(TRANSACTION_API_BASE_URL + "/{extId}", TRANSACTION_EXT_ID_2)
                 .content(objectMapper.writeValueAsString(tx))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
@@ -187,7 +190,7 @@ class AccountDemoApplicationIntegrationTest {
         txService.processUnexecutedTransactions();
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders
-                .get("/transaction/{extId}", TRANSACTION_EXT_ID_2)
+                .get(TRANSACTION_API_BASE_URL + "/{extId}", TRANSACTION_EXT_ID_2)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
@@ -209,7 +212,7 @@ class AccountDemoApplicationIntegrationTest {
     protected Account getAccountByExternalId(String accExtId) throws Exception {
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders
-                .get("/account/{extId}", accExtId)
+                .get(ACCOUNT_API_BASE_URL + "/{extId}", accExtId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())

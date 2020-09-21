@@ -12,12 +12,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import no.mnemonic.account.demo.ApiConstants;
 import no.mnemonic.account.demo.exception.NotFoundException;
 import no.mnemonic.account.demo.model.Account;
 import no.mnemonic.account.demo.service.AccountService;
 
 @RestController
-@RequestMapping(path = "/account")
+@RequestMapping(path = ApiConstants.API_BASE_URL + "/account")
 public class AccountController {
 
     @Autowired

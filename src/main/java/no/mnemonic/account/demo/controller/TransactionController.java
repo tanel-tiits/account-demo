@@ -14,12 +14,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import no.mnemonic.account.demo.ApiConstants;
 import no.mnemonic.account.demo.exception.NotFoundException;
 import no.mnemonic.account.demo.model.Transaction;
 import no.mnemonic.account.demo.service.TransactionService;
 
 @RestController
-@RequestMapping(path = "/transaction")
+@RequestMapping(path = ApiConstants.API_BASE_URL + "/transaction")
 public class TransactionController {
 
     @Autowired

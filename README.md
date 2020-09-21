@@ -49,29 +49,29 @@ When application is running various requests can be sent to application with cmd
 
 ### Requests ### 
 
-* Get list of all accounts
+* Get list of all accounts's data
 
-  http://localhost:8080/account
+  http://localhost:8080/api/v1/account
 
 
 * Get specific account's data
 
-  http://localhost:8080/account/NO0312340000001
+  http://localhost:8080/api/v1/account/NO0312340000001
 
 
-* Get list of all transactions
+* Get list of all transactions' data
 
-  http://localhost:8080/transaction
+  http://localhost:8080/api/v1/transaction
 
 
 * Get specific transaction's data
 
-  http://localhost:8080/transaction/19e7c65a-2d84-4e6b-a75d-2c33abf2daee
+  http://localhost:8080/api/v1/transaction/19e7c65a-2d84-4e6b-a75d-2c33abf2daee
 
 
 * Storing a new transaction is done with PUT request to:
 
-  http://localhost:8080/transaction/some-external-uuid
+  http://localhost:8080/api/v1/transaction/some-external-uuid
 
   with request body containing the transaction's details:
 
@@ -83,6 +83,6 @@ When application is running various requests can be sent to application with cmd
   action is idempotent
 
 
-* Actuator - runtime application info
+* Get runtime application info from Actuator
 
   http://localhost:8080/actuator
