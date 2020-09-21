@@ -1,7 +1,6 @@
 package no.mnemonic.account.demo.model;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -13,10 +12,10 @@ public class Transaction extends AbstractModel {
     private String externalId; // We use UUID in this demo
 
     @JsonProperty
-    private LocalDateTime registeredTime;
+    private Long registeredTime;
 
     @JsonProperty
-    private LocalDateTime executedTime;
+    private Long executedTime;
 
     @JsonProperty
     private Boolean success;
@@ -32,7 +31,7 @@ public class Transaction extends AbstractModel {
 
     public Transaction() {} // for Jackson
 
-    public Transaction(String externalId, LocalDateTime registeredTime, LocalDateTime executedTime, Boolean success,
+    public Transaction(String externalId, Long registeredTime, Long executedTime, Boolean success,
             BigDecimal cashAmount, String sourceAccountExtId, String destinationAccountExtId) {
 
         this.externalId = externalId;
@@ -48,11 +47,11 @@ public class Transaction extends AbstractModel {
         return externalId;
     }
 
-    public LocalDateTime getRegisteredTime() {
+    public Long getRegisteredTime() {
         return registeredTime;
     }
 
-    public LocalDateTime getExecutedTime() {
+    public Long getExecutedTime() {
         return executedTime;
     }
 
@@ -75,8 +74,8 @@ public class Transaction extends AbstractModel {
     public static class Builder {
 
         private String externalId;
-        private LocalDateTime registeredTime;
-        private LocalDateTime executedTime;
+        private Long registeredTime;
+        private Long executedTime;
         private Boolean success;
         private BigDecimal cashAmount;
         private String sourceAccountExtId;
@@ -88,13 +87,13 @@ public class Transaction extends AbstractModel {
             return this;
         }
 
-        public Builder withRegisteredTime(LocalDateTime registeredTime) {
+        public Builder withRegisteredTime(Long registeredTime) {
 
             this.registeredTime = registeredTime;
             return this;
         }
 
-        public Builder withExecutedTime(LocalDateTime executedTime) {
+        public Builder withExecutedTime(Long executedTime) {
 
             this.executedTime = executedTime;
             return this;

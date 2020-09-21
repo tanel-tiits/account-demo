@@ -1,5 +1,7 @@
 package no.mnemonic.account.demo.repository.entity.mapper;
 
+import java.time.ZoneId;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import no.mnemonic.account.demo.model.Account;
@@ -13,11 +15,14 @@ public class TransactionEntityMapper {
 
     public Transaction toTransaction(TransactionEntity te) {
 
+        ZoneId zone = ZoneId.systemDefault();
         return new Transaction.Builder()
             .withExternalId(te.getExternalId())
             .withCashAmount(te.getCashAmount())
-            .withRegisteredTime(te.getRegisteredTime())
-            .withExecutedTime(te.getExecutedTime())
+            .withRegisteredTime(te.getRegisteredTime() != null ?
+                    te.getRegisteredTime().atZone(zone).toInstant().toEpochMilli() : null)
+            .withExecutedTime(te.getExecutedTime() != null ?
+                    te.getExecutedTime().atZone(zone).toInstant().toEpochMilli() : null)
             .withSourceAccountExtId(te.getSourceAccount().getExternalId())
             .withDestinationAccountExtId(te.getDestinationAccount().getExternalId())
             .withSuccess(te.isSuccess())
