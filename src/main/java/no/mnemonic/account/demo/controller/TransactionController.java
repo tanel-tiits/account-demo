@@ -32,7 +32,7 @@ public class TransactionController {
     private TransactionService transactionService;
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
-    @Operation(tags = {ApiConstants.API_VERSION}, operationId = "getAllTransaction")
+    @Operation(tags = {ApiConstants.TAG_TRANSACTION}, operationId = "getAllTransaction")
     @ApiResponse(responseCode = ApiConstants.HTTP_RESPONSE_CODE_OK, description = "Retrieves all transactions")
     @ApiResponse(responseCode = ApiConstants.HTTP_RESPONSE_CODE_INT_SRV_ERROR, description = "Something fails",
         content = @Content(schema = @Schema(implementation = ErrorData.class)))
@@ -41,7 +41,7 @@ public class TransactionController {
     }
 
     @GetMapping(path = "/{extId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    @Operation(tags = {ApiConstants.API_VERSION}, operationId = "getTransactionById")
+    @Operation(tags = {ApiConstants.TAG_TRANSACTION}, operationId = "getTransactionById")
     @ApiResponse(responseCode = ApiConstants.HTTP_RESPONSE_CODE_OK, description = "Retrieves a transactions by Id")
     @ApiResponse(responseCode = ApiConstants.HTTP_RESPONSE_CODE_NOT_FOUND, description = "The transactions is not found",
         content = @Content(schema = @Schema(implementation = ErrorData.class)))
@@ -57,7 +57,7 @@ public class TransactionController {
     }
 
     @PutMapping(path = "/{extId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    @Operation(tags = {ApiConstants.API_VERSION}, operationId = "saveTransaction")
+    @Operation(tags = {ApiConstants.TAG_TRANSACTION}, operationId = "saveTransaction")
     @ApiResponse(responseCode = ApiConstants.HTTP_RESPONSE_CODE_OK, description = "Stores a transaction")
     @ApiResponse(responseCode = ApiConstants.HTTP_RESPONSE_CODE_BAD_REQUEST, description = "Transaction validation fails",
         content = @Content(schema = @Schema(implementation = ErrorData.class)))

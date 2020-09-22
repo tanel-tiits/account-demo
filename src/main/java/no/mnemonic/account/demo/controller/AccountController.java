@@ -30,7 +30,7 @@ public class AccountController {
     private AccountService accountService;
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
-    @Operation(tags = {ApiConstants.API_VERSION}, operationId = "getAllAccounts")
+    @Operation(tags = {ApiConstants.TAG_ACCOUNT}, operationId = "getAllAccounts")
     @ApiResponse(responseCode = ApiConstants.HTTP_RESPONSE_CODE_OK, description = "Retrieves all accounts")
     @ApiResponse(responseCode = ApiConstants.HTTP_RESPONSE_CODE_INT_SRV_ERROR, description = "Something fails",
         content = @Content(schema = @Schema(implementation = ErrorData.class)))
@@ -39,7 +39,7 @@ public class AccountController {
     }
 
     @GetMapping(path = "/{extId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    @Operation(tags = {ApiConstants.API_VERSION}, operationId = "getAccountById")
+    @Operation(tags = {ApiConstants.TAG_ACCOUNT}, operationId = "getAccountById")
     @ApiResponse(responseCode = ApiConstants.HTTP_RESPONSE_CODE_OK, description = "Retrieves an account by Id")
     @ApiResponse(responseCode = ApiConstants.HTTP_RESPONSE_CODE_NOT_FOUND, description = "The account is not found",
         content = @Content(schema = @Schema(implementation = ErrorData.class)))
